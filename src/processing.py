@@ -1,5 +1,5 @@
 # Логика обработки данных (фильтрация, сортировка)
-from typing import List, Dict
+from typing import Dict, List
 
 
 def filter_by_state(data: List[Dict[str, str]], state: str = "EXECUTED") -> List[Dict[str, str]]:
