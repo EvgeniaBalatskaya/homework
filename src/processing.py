@@ -1,6 +1,7 @@
 # Логика обработки данных (фильтрация, сортировка)
 from typing import List, Dict
 
+
 def filter_by_state(data: List[Dict[str, str]], state: str = "EXECUTED") -> List[Dict[str, str]]:
     """
     Фильтрует список словарей по значению ключа 'state'.
