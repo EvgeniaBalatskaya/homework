@@ -2,6 +2,7 @@
 from src.masks import get_mask_card_number, get_mask_account
 from datetime import datetime
 
+
 def mask_account_card(data: str) -> str:
     """
     Маскирует номер карты или счета.
