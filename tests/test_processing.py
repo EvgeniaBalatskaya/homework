@@ -1,6 +1,7 @@
 import unittest
 from src.processing import filter_by_state, sort_by_date
 
+
 class TestProcessingFunctions(unittest.TestCase):
 
     def test_filter_by_state(self):
@@ -21,6 +22,7 @@ class TestProcessingFunctions(unittest.TestCase):
             {'id': 2, 'state': 'CANCELED', 'date': '2021-06-02T14:00:00'},
             {'id': 1, 'state': 'EXECUTED', 'date': '2021-06-01T14:00:00'}
         ])
+
 
 if __name__ == '__main__':
     unittest.main()

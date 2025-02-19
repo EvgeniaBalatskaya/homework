@@ -1,34 +1,27 @@
 # Основная логика виджета
+from src.masks import get_mask_card_number, get_mask_account
+from datetime import datetime
+
 
 def mask_account_card(data: str) -> str:
     """
-    Маскирует номер карты или счета в переданной строке.
-
-    :param data: строка с типом и номером карты/счета
-    :return: строка с замаскированным номером
+    Маскирует номер карты или счета.
     """
-    match = re.search(r'(.+?)\s(\d+)', data)
-    if not match:
-        raise ValueError("Некорректный формат данных")
+    parts = data.rsplit(" ", 1)  # Разделяем по последнему пробелу (чтобы не потерять 'Visa Platinum')
+    if len(parts) != 2:
+        raise ValueError("Неверный формат входных данных")
 
-    card_type, number = match.groups()
-    if "Счет" in card_type:
-        masked_number = get_mask_account(number)
+    name, number = parts
+    if name.lower().startswith("счет"):
+        masked_number = get_mask_account(int(number))
     else:
-        masked_number = get_mask_card_number(number)
+        masked_number = get_mask_card_number(int(number))
 
-    return f"{card_type} {masked_number}"
+    return f"{name} {masked_number}"
 
 
-def get_date(timestamp: str) -> str:
+def get_date(date_str: str) -> str:
     """
-    Преобразует строку с датой в формат ДД.ММ.ГГГГ.
-
-    :param timestamp: строка с датой в формате "2024-03-11T02:26:18.671407"
-    :return: строка в формате "11.03.2024"
+    Форматирует дату из '2024-03-11T02:26:18.671407' в '11.03.2024'.
     """
-    try:
-        date_obj = datetime.fromisoformat(timestamp[:10])
-        return date_obj.strftime("%d.%m.%Y")
-    except ValueError:
-        raise ValueError("Некорректный формат даты")
+    return datetime.fromisoformat(date_str).strftime("%d.%m.%Y")
