@@ -1,6 +1,4 @@
 # Функции для маскировки номеров карт и счетов
-
-
 def get_mask_card_number(card_number: int) -> str:
     """Возвращает маску номера карты в формате XXXX XX** **** XXXX."""
     card_str = str(card_number)  # Преобразуем в строку
