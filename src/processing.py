@@ -1,16 +1,16 @@
 # Логика обработки данных (фильтрация, сортировка)
+from typing import Dict, List
 
-def filter_by_state(data, state='EXECUTED'):
+
+def filter_by_state(data: List[Dict[str, str]], state: str = "EXECUTED") -> List[Dict[str, str]]:
     """
     Фильтрует список словарей по значению ключа 'state'.
     """
-    return [entry for entry in data if entry.get('state') == state]
+    return [entry for entry in data if entry.get("state") == state]
 
 
-from typing import List
-
-def sort_by_date(data: List[dict], reverse: bool = True) -> List[dict]:
+def sort_by_date(data: List[Dict[str, str]], reverse: bool = True) -> List[Dict[str, str]]:
     """
     Сортирует список словарей по дате в формате ISO.
     """
-    return sorted(data, key=lambda x: x['date'], reverse=reverse)
+    return sorted(data, key=lambda x: x["date"], reverse=reverse)
