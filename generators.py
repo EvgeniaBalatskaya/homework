@@ -32,15 +32,7 @@ def transaction_descriptions(transactions: List[Dict]) -> Iterator[str]:
 
 def card_number_generator(start: int, end: int) -> Iterator[str]:
     """
-    Генератор для генерации номеров банковских карт в формате XXXX XXXX XXXX XXXX.
-
-    Принимает диапазон значений и генерирует номера карт в этом диапазоне, форматируя их в виде:
-    "XXXX XXXX XXXX XXXX".
-
-    :param start: Начальное значение диапазона для генерации номеров карт (например, 1).
-    :param end: Конечное значение диапазона для генерации номеров карт (например, 5).
-    :return: Итератор, который поочередно возвращает номера карт в формате "XXXX XXXX XXXX XXXX".
+    Генерирует номера карт в заданном диапазоне.
     """
-    for num in range(start, end + 1):
-        # Форматирование номера карты в виде XXXX XXXX XXXX XXXX
-        yield f"{num:016d}"[:4] + " " + f"{num:016d}"[4:8] + " " + f"{num:016d}"[8:12] + " " + f"{num:016d}"[12:16]
+    for num in range(start, end):  # ← Здесь `stop` уже НЕ включается
+        yield f"{num:04d} {num % 10000:04d} {num % 10000:04d} {num % 10000:04d}"
