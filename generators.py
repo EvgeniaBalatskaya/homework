@@ -1,4 +1,4 @@
-from typing import List, Dict, Iterator
+from typing import Dict, Iterator, List
 
 
 def filter_by_currency(transactions: List[Dict], currency: str) -> Iterator[Dict]:
