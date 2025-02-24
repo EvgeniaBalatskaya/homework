@@ -16,4 +16,3 @@ def test_get_mask_card_number(card_number, expected):
 ])
 def test_get_mask_account(account_number, expected):
     assert get_mask_account(account_number) == expected
-
