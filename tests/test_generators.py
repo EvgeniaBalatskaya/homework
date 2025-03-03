@@ -46,4 +46,7 @@ def test_card_number_generator() -> None:
     Ожидаем, что функция вернет правильное количество номеров карт в диапазоне от start до stop.
     """
     result = list(card_number_generator(1000000000000000, 1000000000000010))
-    assert len(result) == 10, f"Должно быть сгенерировано 10 номеров карт, а не {len(result)}"
+    assert len(result) == 10, (
+        f"Должно быть сгенерировано 10 номеров карт, а не {len(result)}. "
+        f"Номера: {result[0] % 10000:04d} {result[1] % 10000:04d} {result[2] % 10000:04d}"
+    )

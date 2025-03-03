@@ -1,0 +1,36 @@
+2025-03-03 19:14:32,442 - Starting function: add with arguments (3, 5) and kwargs {}
+2025-03-03 19:14:32,442 - Function add completed successfully with result: 8
+2025-03-03 19:14:32,504 - Starting function: add with arguments ('3', 5) and kwargs {}
+2025-03-03 19:14:32,504 - Function add failed with error: can only concatenate str (not "int") to str. Arguments: ('3', 5), {}
+2025-03-03 19:14:32,510 - Starting function: subtract with arguments (10, 4) and kwargs {}
+2025-03-03 19:14:32,510 - Function subtract completed successfully with result: 6
+2025-03-03 19:15:44,241 - Starting function: add with arguments (3, 5) and kwargs {}
+2025-03-03 19:15:44,241 - Function add completed successfully with result: 8
+2025-03-03 19:15:44,300 - Starting function: add with arguments ('3', 5) and kwargs {}
+2025-03-03 19:15:44,472 - Function add failed with error: can only concatenate str (not "int") to str. Arguments: ('3', 5), {}
+2025-03-03 19:15:44,493 - Starting function: subtract with arguments (10, 4) and kwargs {}
+2025-03-03 19:15:44,493 - Function subtract completed successfully with result: 6
+2025-03-03 19:16:28,586 - Starting function: add with arguments (3, 5) and kwargs {}
+2025-03-03 19:16:28,586 - Function add completed successfully with result: 8
+2025-03-03 19:16:28,645 - Starting function: add with arguments ('3', 5) and kwargs {}
+2025-03-03 19:16:28,646 - Function add failed with error: can only concatenate str (not "int") to str. Arguments: ('3', 5), {}
+2025-03-03 19:16:28,650 - Starting function: subtract with arguments (10, 4) and kwargs {}
+2025-03-03 19:16:28,650 - Function subtract completed successfully with result: 6
+2025-03-03 19:17:15,942 - Starting function: add with arguments (3, 5) and kwargs {}
+2025-03-03 19:17:15,943 - Function add completed successfully with result: 8
+2025-03-03 19:17:16,004 - Starting function: add with arguments ('3', 5) and kwargs {}
+2025-03-03 19:17:16,004 - Function add failed with error: can only concatenate str (not "int") to str. Arguments: ('3', 5), {}
+2025-03-03 19:17:16,008 - Starting function: subtract with arguments (10, 4) and kwargs {}
+2025-03-03 19:17:16,008 - Function subtract completed successfully with result: 6
+2025-03-03 19:18:01,056 - Starting function: add with arguments (3, 5) and kwargs {}
+2025-03-03 19:18:01,056 - Function add completed successfully with result: 8
+2025-03-03 19:18:01,125 - Starting function: add with arguments ('3', 5) and kwargs {}
+2025-03-03 19:18:01,126 - Function add failed with error: can only concatenate str (not "int") to str. Arguments: ('3', 5), {}
+2025-03-03 19:18:01,131 - Starting function: subtract with arguments (10, 4) and kwargs {}
+2025-03-03 19:18:01,131 - Function subtract completed successfully with result: 6
+2025-03-03 19:19:12,081 - Starting function: add with arguments (3, 5) and kwargs {}
+2025-03-03 19:19:12,081 - Function add completed successfully with result: 8
+2025-03-03 19:19:12,140 - Starting function: add with arguments ('3', 5) and kwargs {}
+2025-03-03 19:19:12,141 - Function add failed with error: can only concatenate str (not "int") to str. Arguments: ('3', 5), {}
+2025-03-03 19:19:12,145 - Starting function: subtract with arguments (10, 4) and kwargs {}
+2025-03-03 19:19:12,146 - Function subtract completed successfully with result: 6
