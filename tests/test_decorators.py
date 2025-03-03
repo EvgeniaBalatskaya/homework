@@ -1,6 +1,6 @@
 import pytest
 
-from decorators import log
+from src.decorators import log
 
 
 # Пример функции с декоратором
@@ -15,7 +15,7 @@ def subtract(a: int, b: int) -> int:
 
 
 # Тест успешного выполнения функции с логированием в консоль
-def test_log_function_success(capsys):
+def test_log_function_success(capsys: pytest.CaptureFixture) -> None:
     add(3, 5)  # Вызываем функцию
     captured = capsys.readouterr()  # Перехватываем вывод в консоль
     assert "Starting function: add" in captured.out  # Проверяем начало
@@ -23,7 +23,7 @@ def test_log_function_success(capsys):
 
 
 # Тест ошибки в функции с логированием в консоль
-def test_log_function_error(capsys):
+def test_log_function_error(capsys: pytest.CaptureFixture) -> None:
     with pytest.raises(TypeError):
         add("3", 5)  # Вызываем функцию с ошибкой
     captured = capsys.readouterr()  # Перехватываем вывод в консоль
@@ -31,7 +31,7 @@ def test_log_function_error(capsys):
 
 
 # Тест функции с логированием в файл
-def test_log_function_with_file(capsys):
+def test_log_function_with_file() -> None:
     subtract(10, 4)  # Вызываем функцию
     with open("test_log.txt", "r") as file:
         log_content = file.read()  # Читаем содержимое файла
