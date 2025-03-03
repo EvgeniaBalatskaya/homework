@@ -1,19 +1,27 @@
-import logging  # Добавляем импорт
+import logging
+
 import pytest
+
 from src.decorators import add, faulty_add
 
-def test_log_function_success(caplog: pytest.CaptureFixture) -> None:
-    with caplog.at_level(logging.DEBUG):  # Устанавливаем уровень логирования
+
+# Тестирование функции, которая должна завершиться успешно
+def test_log_function_success(caplog: pytest.LogCaptureFixture) -> None:
+    # Устанавливаем уровень логирования и перехватываем вывод
+    with caplog.at_level(logging.DEBUG):
         add(3, 5)  # Вызываем функцию
 
     # Проверяем, что в логах есть нужная информация
     assert "Starting function: add" in caplog.text
     assert "add ok" in caplog.text
 
-def test_log_function_error(caplog: pytest.CaptureFixture) -> None:
-    with caplog.at_level(logging.DEBUG):  # Устанавливаем уровень логирования
+
+# Тестирование функции, которая вызывает ошибку
+def test_log_function_error(caplog: pytest.LogCaptureFixture) -> None:
+    # Устанавливаем уровень логирования и перехватываем вывод
+    with caplog.at_level(logging.DEBUG):
         with pytest.raises(TypeError):
-            faulty_add(3, '5')  # Вызываем функцию с ошибкой
+            faulty_add(3, "5")  # Вызываем функцию с ошибкой
 
     # Проверяем, что в логах есть нужная информация
     assert "Starting function: faulty_add" in caplog.text
