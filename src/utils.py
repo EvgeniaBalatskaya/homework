@@ -1,16 +1,26 @@
 import json
-from typing import List, Dict
 
-def read_json_file(file_path: str) -> List[Dict]:
+from pathlib import Path
+from typing import Any, List
+
+
+def read_json(file_path: str) -> List[dict[str, Any]]:
     """
-    Читает JSON-файл с транзакциями и возвращает список словарей.
-    Если файл пустой, не содержит список или отсутствует — возвращает пустой список.
+    Читает JSON-файл с банковскими операциями и возвращает список транзакций.
+
+    :param file_path: Путь к JSON-файлу.
+    :return: Список словарей с транзакциями.
     """
+    file = Path(file_path)
+
+    if not file.exists() or not file.is_file():
+        return []
+
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-            if isinstance(data, list):
-                return data
-    except (FileNotFoundError, json.JSONDecodeError):
-        pass
-    return []
+        with file.open(encoding="utf-8") as f:
+            data = json.load(f)
+            if not isinstance(data, list):
+                return []
+            return data
+    except (json.JSONDecodeError, ValueError):
+        return []

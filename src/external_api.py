@@ -1,40 +1,39 @@
 import os
+
+from typing import Optional
+
 import requests
+
 from dotenv import load_dotenv
+
 
 # Загружаем переменные окружения из .env
 load_dotenv()
-API_KEY = os.getenv("EXCHANGE_API_KEY")
+
+API_KEY = os.getenv("API_KEY")
+BASE_URL = "https://apilayer.com/exchangerates_data-api"
 
 
-def convert_to_rub(transaction: dict) -> float:
+def get_exchange_rate(currency: str) -> Optional[float]:
     """
-    Конвертирует сумму транзакции в рубли (RUB).
+    Получает текущий курс валюты по отношению к рублю.
 
-    :param transaction: Словарь с данными о транзакции (ключи: amount, currency)
-    :return: Сумма в рублях (float)
+    :param currency: Валюта (USD, EUR).
+    :return: Курс валюты к рублю или None, если запрос не удался.
     """
-    amount = transaction.get("amount")
-    currency = transaction.get("currency")
+    if currency not in {"USD", "EUR"}:
+        return None
 
-    # Если уже RUB, просто возвращаем сумму
-    if currency == "RUB":
-        return float(amount)
-
-    # Проверяем, есть ли ключ API
-    if not API_KEY:
-        raise ValueError("API-ключ для обменного курса не найден!")
-
-    # Запрос к API курсов валют
-    url = f"https://api.apilayer.com/exchangerates_data/latest?base={currency}&symbols=RUB"
-    headers = {"apikey": API_KEY}
+    params = {"access_key": API_KEY, "symbols": "RUB", "base": currency}
 
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(BASE_URL, params=params, timeout=5)
         response.raise_for_status()
         data = response.json()
-        rate = data["rates"]["RUB"]
-        return float(amount) * rate
-    except requests.RequestException as e:
-        print(f"Ошибка запроса к API: {e}")
-        return 0.0  # В случае ошибки возвращаем 0
+
+        rate = data["rates"].get("RUB")
+        if isinstance(rate, (int, float)):
+            return float(rate)
+        return None
+    except (requests.RequestException, KeyError, ValueError):
+        return None
