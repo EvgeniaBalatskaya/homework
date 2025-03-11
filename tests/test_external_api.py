@@ -1,35 +1,52 @@
+from typing import Dict
 from unittest.mock import mock_open, patch
 
-from src.external_api import read_json
+import pytest
+
+from src.external_api import convert_to_rub, read_json
 
 
-def test_read_json_valid():
-    # Мокаем содержимое файла
-    mock_data = '[{"amount": 100, "currency": "RUB"}]'
+def test_read_json_valid() -> None:
+    mock_data = '[{"amount": 100.0, "currency": "RUB"}]'
     with patch("builtins.open", mock_open(read_data=mock_data)):
         result = read_json("data/operations.json")
-        assert result == [{"amount": 100, "currency": "RUB"}]  # Ожидаем правильный список
+        assert result == [{"amount": 100.0, "currency": "RUB"}]  # Ожидаем число, а не строку
 
 
-def test_read_json_empty():
-    # Мокаем пустой файл
-    mock_data = ""
+def test_read_json_empty() -> None:
+    with patch("builtins.open", mock_open(read_data="")):
+        result = read_json("data/operations.json")
+        assert result == []
+
+
+def test_read_json_invalid() -> None:
+    with patch("builtins.open", mock_open(read_data="not a json")):
+        result = read_json("data/operations.json")
+        assert result == []
+
+
+def test_read_json_not_a_list() -> None:
+    mock_data = '{"amount": 100.0, "currency": "RUB"}'  # Убедитесь, что это словарь с числами
     with patch("builtins.open", mock_open(read_data=mock_data)):
         result = read_json("data/operations.json")
-        assert result == []  # Ожидаем пустой список
+        assert result == []
 
 
-def test_read_json_invalid():
-    # Мокаем некорректный JSON
-    mock_data = "not a json"
-    with patch("builtins.open", mock_open(read_data=mock_data)):
-        result = read_json("data/operations.json")
-        assert result == []  # Ожидаем пустой список
+def test_convert_to_rub_valid() -> None:
+    transaction: Dict[str, float] = {"amount": 100.0, "currency": "USD"}
+
+    with patch("src.external_api.get_exchange_rate", return_value=75.0):
+        result = convert_to_rub(transaction)
+        assert result == 7500.0
 
 
-def test_read_json_not_a_list():
-    # Мокаем данные, которые не являются списком
-    mock_data = '{"amount": 100, "currency": "RUB"}'  # Это объект, а не список
-    with patch("builtins.open", mock_open(read_data=mock_data)):
-        result = read_json("data/operations.json")
-        assert result == []  # Ожидаем пустой список, так как данные не список
+def test_convert_to_rub_already_rub() -> None:
+    transaction: Dict[str, float] = {"amount": 100.0, "currency": "RUB"}
+    result = convert_to_rub(transaction)
+    assert result == 100.0
+
+
+def test_convert_to_rub_invalid_currency() -> None:
+    transaction: Dict[str, float] = {"amount": 100.0, "currency": "GBP"}
+    with pytest.raises(ValueError):
+        convert_to_rub(transaction)

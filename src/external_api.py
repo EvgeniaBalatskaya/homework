@@ -1,6 +1,7 @@
+import json
 import os
 
-from typing import Dict
+from typing import Any, Dict, List
 
 import requests
 
@@ -12,6 +13,31 @@ load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
 BASE_URL = "https://api.apilayer.com/exchangerates_data/convert"
+
+
+def read_json(file_path: str) -> List[Dict[str, Any]]:
+    """
+    Читает и возвращает содержимое JSON-файла.
+
+    :param file_path: Путь к файлу.
+    :return: Данные из JSON-файла, если это список, или пустой список, если данные некорректны.
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+        # Проверяем, что данные являются списком
+        if isinstance(data, list):
+            return data
+        else:
+            return []  # Возвращаем пустой список, если данные не список
+
+    except FileNotFoundError:
+        print(f"Файл по пути {file_path} не найден.")
+        return []
+    except json.JSONDecodeError:
+        print(f"Ошибка при декодировании JSON из файла {file_path}.")
+        return []
 
 
 def get_exchange_rate(currency: str) -> float:
