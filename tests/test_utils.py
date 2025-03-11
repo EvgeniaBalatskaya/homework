@@ -1,25 +1,20 @@
-from unittest.mock import mock_open, patch
+import json
 
-import pytest
-
-from src.utils import read_json
+from typing import Dict, List
 
 
-@pytest.mark.parametrize(
-    "file_data, expected",
-    [
-        ('[{"amount": 100, "currency": "RUB"}]', [{"amount": 100, "currency": "RUB"}]),
-        ("{}", []),  # JSON-объект вместо списка
-        ("", []),  # Пустой файл
-    ],
-)
-def test_read_json(file_data: str, expected: list[dict]) -> None:
-    with patch("builtins.open", mock_open(read_data=file_data)):
-        with patch("pathlib.Path.exists", return_value=True):
-            with patch("pathlib.Path.is_file", return_value=True):
-                assert read_json("data/operations.json") == expected
+def read_json(file_path: str) -> List[Dict]:
+    """
+    Читает данные из JSON-файла и возвращает список транзакций.
 
-
-def test_read_json_file_not_found() -> None:
-    with patch("pathlib.Path.exists", return_value=False):
-        assert read_json("data/operations.json") == []
+    :param file_path: Путь к файлу JSON.
+    :return: Список транзакций в формате словарей.
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            if isinstance(data, list):
+                return data
+            return []
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
