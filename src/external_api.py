@@ -1,7 +1,6 @@
-import json
 import os
 
-from typing import Any, Dict, List
+from typing import Dict
 
 import requests
 
@@ -13,31 +12,6 @@ load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
 BASE_URL = "https://api.apilayer.com/exchangerates_data/convert"
-
-
-def read_json(file_path: str) -> List[Dict[str, Any]]:
-    """
-    Читает и возвращает содержимое JSON-файла.
-
-    :param file_path: Путь к файлу.
-    :return: Данные из JSON-файла, если это список, или пустой список, если данные некорректны.
-    """
-    try:
-        with open(file_path, "r", encoding="utf-8") as file:
-            data = json.load(file)
-
-        # Проверяем, что данные являются списком
-        if isinstance(data, list):
-            return data
-        else:
-            return []  # Возвращаем пустой список, если данные не список
-
-    except FileNotFoundError:
-        print(f"Файл по пути {file_path} не найден.")
-        return []
-    except json.JSONDecodeError:
-        print(f"Ошибка при декодировании JSON из файла {file_path}.")
-        return []
 
 
 def get_exchange_rate(currency: str) -> float:
@@ -58,8 +32,13 @@ def get_exchange_rate(currency: str) -> float:
     response.raise_for_status()
     data = response.json()
 
-    # Убедимся, что возвращаемое значение — это тип float
-    return float(data["result"])
+    # Преобразуем результат в float, если это строка
+    result = data.get("result", "0")
+
+    try:
+        return float(result)  # Преобразуем строку в float
+    except ValueError:
+        raise ValueError(f"Unable to convert result to float: {result}")
 
 
 def convert_to_rub(transaction: Dict[str, float]) -> float:
@@ -72,16 +51,9 @@ def convert_to_rub(transaction: Dict[str, float]) -> float:
     amount = transaction["amount"]
     currency = transaction["currency"]
 
-    # Убедимся, что валюта - это строка
-    if not isinstance(currency, str):
-        raise ValueError(f"Currency should be a string, but got {type(currency)}")
-
-    # Если валюта уже в рублях, возвращаем сумму как есть
     if currency == "RUB":
-        return float(amount)
+        return amount
 
-    # Конвертируем валюту в рубли
-    exchange_rate = get_exchange_rate(currency)
-
-    # Возвращаем сумму в рублях (тип float)
-    return float(amount * exchange_rate)
+    # Убедитесь, что currency передается как строка
+    exchange_rate = get_exchange_rate(str(currency))  # Преобразуем в строку, если нужно
+    return amount * exchange_rate
