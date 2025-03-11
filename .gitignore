@@ -1,3 +1,5 @@
 venv/
 .idea/
 __pycache__/
+data/operations.json
+.env
