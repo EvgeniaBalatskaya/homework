@@ -1,0 +1,9 @@
+2025-03-12 21:29:59,701 - utils - DEBUG - Инициализация модуля utils
+2025-03-12 21:29:59,804 - utils - INFO - Попытка прочитать файл: data/operations.json
+2025-03-12 21:29:59,804 - utils - INFO - Успешно прочитан файл: data/operations.json, количество транзакций: 1
+2025-03-12 21:29:59,810 - utils - INFO - Попытка прочитать файл: data/operations.json
+2025-03-12 21:29:59,811 - utils - ERROR - Ошибка в формате JSON в файле: data/operations.json
+2025-03-12 21:29:59,815 - utils - INFO - Попытка прочитать файл: data/operations.json
+2025-03-12 21:29:59,816 - utils - WARNING - Неверный формат данных в файле data/operations.json: ожидался список, получен <class 'dict'>
+2025-03-12 21:29:59,819 - utils - INFO - Попытка прочитать файл: data/operations.json
+2025-03-12 21:29:59,819 - utils - WARNING - Файл не существует: data/operations.json
