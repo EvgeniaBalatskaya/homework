@@ -1,3 +1,26 @@
+import logging
+import os
+
+
+# Создаем папку logs, если её нет
+os.makedirs("logs", exist_ok=True)
+
+# Настраиваем логер
+logger = logging.getLogger("masks")
+logger.setLevel(logging.DEBUG)
+
+# Хэндлер для записи в файл (перезаписывается при запуске)
+file_handler = logging.FileHandler("logs/masks.log", mode="w", encoding="utf-8")
+file_handler.setLevel(logging.DEBUG)
+
+# Формат логов
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(formatter)
+
+# Добавляем хэндлер к логеру
+logger.addHandler(file_handler)
+
+
 # Функции для маскировки номеров карт и счетов
 def get_mask_card_number(card_number: int) -> str:
     """Возвращает маску номера карты в формате XXXX XX** **** XXXX."""
