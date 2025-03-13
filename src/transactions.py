@@ -7,8 +7,9 @@ def count_categories(transactions: List[Dict[str, str]]) -> Dict[str, int]:
     category_counter: Counter[str] = Counter()
 
     for transaction in transactions:
-        # Добавляем категорию в счетчик
+        # Получаем описание транзакции и приводим его к нижнему регистру для унификации
         description = transaction.get("description", "").lower()
+        # Увеличиваем счетчик для каждой категории
         category_counter[description] += 1
 
     return dict(category_counter)

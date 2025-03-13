@@ -3,32 +3,53 @@ from typing import Dict, List
 from src.transactions import count_categories
 
 
+# Тест для функции count_categories
 def test_count_categories() -> None:
-    transactions = [
-        {"description": "Payment for services"},
-        {"description": "Payment for services"},
-        {"description": "Refund for services"},
+    # Тестовые данные
+    transactions: List[Dict[str, str]] = [
+        {"description": "Перевод с карты на карту"},
+        {"description": "Перевод с карты на карту"},
+        {"description": "Открытие вклада"},
+        {"description": "Перевод организации"},
+        {"description": "Перевод с карты на карту"},
     ]
 
+    # Ожидаемый результат
+    expected_result: Dict[str, int] = {"перевод с карты на карту": 3, "открытие вклада": 1, "перевод организации": 1}
+
+    # Вызов функции
     result = count_categories(transactions)
 
-    assert result == {"payment for services": 2, "refund for services": 1}
+    # Проверка на корректность
+    assert result == expected_result
 
 
 def test_empty_transactions() -> None:
+    # Пустой список транзакций
     transactions: List[Dict[str, str]] = []
+
+    # Ожидаемый результат - пустой словарь
+    expected_result: Dict[str, int] = {}
+
     result = count_categories(transactions)
 
-    assert result == {}
+    assert result == expected_result
 
 
-def test_invalid_data() -> None:
-    transactions = [
-        {"description": "Payment for services"},
-        {"description": "Refund for services"},
-        {"description": "Invalid operation"},
+def test_missing_description() -> None:
+    # Тест с транзакциями без описания
+    transactions: List[Dict[str, str]] = [
+        {"description": "Перевод с карты на карту"},
+        {"description": ""},
+        {"description": "Открытие вклада"},
     ]
 
+    expected_result: Dict[str, int] = {
+        "перевод с карты на карту": 1,
+        "открытие вклада": 1,
+        "": 1,  # Пустая категория тоже должна быть учтена
+    }
+
     result = count_categories(transactions)
 
-    assert result == {"payment for services": 1, "refund for services": 1, "invalid operation": 1}
+    assert result == expected_result
