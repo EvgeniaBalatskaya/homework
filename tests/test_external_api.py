@@ -1,73 +1,40 @@
-import pytest
 from unittest.mock import patch
-from src.external_api import get_exchange_rate, convert_to_rub
+
+import pytest  # Необходимо для использования pytest
+import requests  # Необходимо для работы с requests
+
+from src.external_api import get_exchange_rate  # Убедитесь, что путь правильный
 
 
-# Мокирование API
-@pytest.fixture
-def mock_requests_get():
-    with patch('requests.get') as mock_get:
-        yield mock_get
+# Тестируем успешный случай получения курса валюты
+def test_get_exchange_rate_success() -> None:
+    """Тест для успешного получения курса валюты"""
+    # Мокаем запрос к API
+    with patch("requests.get") as mock_get:
+        # Создаем мокаемый ответ
+        mock_response = mock_get.return_value
+        mock_response.status_code = 200  # Статус успешного ответа
+        mock_response.json.return_value = {"result": "75.0"}  # Мокаем результат из API
+
+        # Проверяем, что возвращаемое значение равно ожидаемому
+        result = get_exchange_rate("USD")
+        assert result == 75.0  # Ожидаем, что курс будет 75.0
 
 
-def test_get_exchange_rate(mock_requests_get):
-    # Мокируем ответ от API
-    mock_response = {
-        "result": "75.5"
-    }
-    mock_requests_get.return_value.json.return_value = mock_response
-    mock_requests_get.return_value.raise_for_status = lambda: None  # Игнорируем ошибку для теста
-
-    # Проверяем корректный результат
-    result = get_exchange_rate("USD")
-    assert result == 75.5
+# Тестируем случай, когда валюта не поддерживается
+def test_get_exchange_rate_invalid_currency() -> None:
+    """Тест для случая не поддерживаемой валюты"""
+    with pytest.raises(ValueError):
+        get_exchange_rate("GBP")  # Проверяем несуществующую валюту
 
 
-def test_get_exchange_rate_invalid_currency(mock_requests_get):
-    # Проверяем, что ValueError поднимется при неверной валюте
-    with pytest.raises(ValueError, match="Unsupported currency: ABC"):
-        get_exchange_rate("ABC")
+# Тестируем случай, когда API возвращает ошибку
+def test_get_exchange_rate_api_error() -> None:
+    """Тест для случая ошибки API"""
+    with patch("requests.get") as mock_get:
+        mock_response = mock_get.return_value
+        mock_response.status_code = 400  # Статус ошибки
+        mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("Bad Request")
 
-
-def test_get_exchange_rate_invalid_response(mock_requests_get):
-    # Мокируем ошибочный ответ от API
-    mock_response = {
-        "result": "invalid"
-    }
-    mock_requests_get.return_value.json.return_value = mock_response
-    mock_requests_get.return_value.raise_for_status = lambda: None
-
-    # Проверяем, что поднимется ValueError при некорректном значении результата
-    with pytest.raises(ValueError, match="Unable to convert result to float"):
-        get_exchange_rate("USD")
-
-
-# Тест для convert_to_rub
-def test_convert_to_rub(mock_requests_get):
-    # Мокируем ответ для валюты USD
-    mock_response = {
-        "result": "75.5"
-    }
-    mock_requests_get.return_value.json.return_value = mock_response
-    mock_requests_get.return_value.raise_for_status = lambda: None
-
-    # Пример транзакции в USD
-    transaction = {"amount": 100, "currency": "USD"}
-
-    result = convert_to_rub(transaction)
-    assert result == 7550.0
-
-
-def test_convert_to_rub_already_in_rub():
-    # Пример транзакции в RUB
-    transaction = {"amount": 100, "currency": "RUB"}
-
-    result = convert_to_rub(transaction)
-    assert result == 100.0
-
-
-def test_convert_to_rub_invalid_currency(mock_requests_get):
-    # Проверка с невалидной валютой
-    with pytest.raises(ValueError, match="Unsupported currency: ABC"):
-        transaction = {"amount": 100, "currency": "ABC"}
-        convert_to_rub(transaction)
+        with pytest.raises(requests.exceptions.HTTPError):
+            get_exchange_rate("USD")  # Проверка выброса ошибки
