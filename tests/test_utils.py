@@ -1,6 +1,6 @@
 from unittest.mock import mock_open, patch
 
-from file_processing.utils import read_json
+from src.file_processing.utils import read_json
 
 
 def test_read_json_valid() -> None:

@@ -6,14 +6,14 @@ from pathlib import Path
 
 
 # Создаем папку logs, если её нет
-os.makedirs("../src/logs", exist_ok=True)
+os.makedirs("../logs", exist_ok=True)
 
 # Настраиваем логер для модуля utils
 logger = logging.getLogger("utils")
 logger.setLevel(logging.DEBUG)
 
 # Хэндлер для записи в файл (перезаписывается при запуске)
-file_handler = logging.FileHandler("../src/logs/utils.log", mode="w", encoding="utf-8")
+file_handler = logging.FileHandler("../logs/utils.log", mode="w", encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
 # Формат логов
