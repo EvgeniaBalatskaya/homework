@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
 
-from file_processing.reader import read_csv_transactions, read_excel_transactions
+from src.file_processing.reader import read_csv_transactions, read_excel_transactions
 
 
 # Фикстуры
